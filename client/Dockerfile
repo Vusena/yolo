@@ -1,28 +1,26 @@
-# Use an official Node runtime as a parent image
-FROM node:14-slim AS build
-
-# Set the working directory in the container
-WORKDIR /usr/src/app
-
-# Copy the package.json and package-lock.json files to the container
-COPY package*.json ./
-
-# Install application dependencies
-RUN npm install
-
-# Copy the rest of the application code to the container
-COPY . .
-
-FROM alpine:3.16.7
+# Build Stage
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
-RUN apk update && apk add npm
+# Install required system packages for crypto support
+RUN apk update && apk add --no-cache openssl ca-certificates
 
-COPY --from=build /usr/src/app /app
+# Set env to use legacy OpenSSL provider
+ENV NODE_OPTIONS=--openssl-legacy-provider
 
-# Expose the port the app runs on
-EXPOSE 3000
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install
 
-# Define the command to run your app
-CMD ["npm", "start"]
+# Copy source code
+COPY . .
+
+# Build the React app
+RUN npm run build
+
+# Production Stage
+FROM nginx:stable-alpine AS production
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
