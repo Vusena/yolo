@@ -54,3 +54,8 @@ CMD ["nginx", "-g", "daemon off;"] - Sets the default command to run Nginx in th
  # The backend image pushed to DockerHub as shown below
 ![clientyolo image](client/public/yoloclient-image.png)
 
+## DATABASE CONTAINER
+#  Comments one the choice of the base image on which to build the container.
+
+ # Dockerfile directives used
+
