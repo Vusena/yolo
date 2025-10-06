@@ -1,7 +1,7 @@
 
 ##  BACKEND CONTAINER
 #  Comments one the choice of the base image on which to build the container.
-For the backend container, I chose node:24-alpine as the base image. This is Node.js version 24 built on Alpine Linux, which is a very small and lightweight Linux distribution. Using Alpine keeps the final image size minimal while including Node.js pre-installed, so we do not have to install it manually. This choice ensures the container has the exact Node.js version we need and reduces overhead, making builds and deployments faster.
+The backend container uses node:18-alpine for both the build and production stages. Alpine Linux is preferred for its minimal footprint and security, while Node.js 18 provides long-term support and modern features. This combination ensures a lightweight, fast, and production-ready environment.
 
  # Dockerfile directives used
 
@@ -14,6 +14,10 @@ COPY package*.json ./ – Copies package.json and package-lock.json into the con
 RUN npm ci --production – Installs only production dependencies, keeping the image smaller and excluding development-only packages.
 
 COPY . . – Copies all backend source files (server.js, routes/, models/, etc.) into the container.
+
+FROM node:18-alpine AS production – Begins the final stage using the same base image.
+
+COPY --from=build /usr/src/app /app – Transfers the built app into the production container.
 
 EXPOSE 5000 – Documents the port that the backend service will listen on. This allows Docker or other services to know which port to map.
 
@@ -56,6 +60,38 @@ CMD ["nginx", "-g", "daemon off;"] - Sets the default command to run Nginx in th
 
 ## DATABASE CONTAINER
 #  Comments one the choice of the base image on which to build the container.
+The MongoDB container uses debian:bookworm-slim as its base image. This choice balances stability, compatibility, and minimal size:
+Debian is a widely supported and secure Linux distribution, ideal for production environments. The bookworm-slim variant strips out unnecessary components, reducing image size while retaining full package manager support. This base ensures compatibility with MongoDB’s official Debian packages and avoids Alpine-related build issues.
 
  # Dockerfile directives used
+FROM debian:bookworm-slim - Begins with a minimal Debian image to keep the container lightweight and secure.
+
+-Set environment variables
+ENV MONGO_VERSION=8.0.5
+ENV DEBIAN_FRONTEND=noninteractive
+-Defines the MongoDB version and disables interactive prompts during package installation.
+
+- Install dependencies required for MongoDB
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    && curl -fsSL https://pgp.mongodb.com/server-8.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/mongodb.gpg] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" \
+        > /etc/apt/sources.list.d/mongodb-org.list \
+    && apt-get update && apt-get install -y mongodb-org-server mongodb-org-shell \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+--- installs MongoDB securely by:
+                                Adding the official MongoDB GPG key
+                                Registering the MongoDB repository
+                                Installing only the server and shell components
+                                Cleaning up to reduce image size
+
+Expose default MongoDB port - EXPOSE 27017
+Create a data directory
+VOLUME ["/data/db"]
+WORKDIR /data/db
+
+CMD ["mongod", "--bind_ip_all"] - Runs the MongoDB daemon and binds it to all available IP addresses, allowing external access.
+
+
 

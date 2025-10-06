@@ -1,14 +1,27 @@
-
-# Build Stage
+# 🏗️ Build Stage
 FROM node:18-alpine AS build
-WORKDIR /app
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm ci --production
+
+# Copy application code
 COPY . .
-RUN npm run build
- 
-# Production Stage
-FROM nginx:stable-alpine AS production
-COPY --from=build /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+# 🧼 Production Stage
+FROM node:18-alpine AS production
+
+# Set working directory
+WORKDIR /app
+
+# Copy built app from build stage
+COPY --from=build /usr/src/app /app
+
+# Expose backend port
+EXPOSE 5000
+
+# Start the server
+CMD ["node", "server.js"]
