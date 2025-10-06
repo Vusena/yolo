@@ -93,5 +93,18 @@ WORKDIR /data/db
 
 CMD ["mongod", "--bind_ip_all"] - Runs the MongoDB daemon and binds it to all available IP addresses, allowing external access.
 
+# The database image pushed to DockerHub as shown below
+![mongo database image](client/public/yolo-dbv1.png)
 
+## Compose Status
+The docker-compose.yml has successfully launched the full microservice stack — React frontend, Node.js backend, and MongoDB database — each running in its own container. The application is now live and accessible, with added products persisting correctly in the database. This confirms that inter-service communication and data storage are functioning as expected.
+
+At this stage:
+
+The app is running smoothly, as shown in the attached screenshot
+Product data persists across container restarts via the named volume
+The MongoDB image is functional but still unoptimized — further slimming is planned
+Build sections for client and backend will be added to streamline local development 
+
+![application1](client/public/application1.png)
 
