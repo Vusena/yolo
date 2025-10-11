@@ -7,8 +7,6 @@
 #To launch this app without having to clone the entire repository,use the docker-compose.yaml file to run the app
 
 
-version: '3.9'
-
 services:
   #  Frontend (React)
   client:
