@@ -108,3 +108,12 @@ Build sections for client and backend will be added to streamline local developm
 
 ![application1](client/public/application1.png)
 
+## Docker-compose Networking (Application port allocation and a bridge network implementation)
+To ensure seamless communication between microservices, a custom bridge network named yolo-network was defined in the docker-compose.yaml file. This isolates the services from external traffic while allowing internal service discovery via container names (e.g., mongodb, backend). Each service exposes only the necessary ports to the host machine: the React frontend maps port 3000 to container port 80, the Node.js backend exposes port 5000, and MongoDB uses its default port 27017. This allocation avoids port conflicts and keeps the host environment clean. The bridge network also supports future scalability, allowing new services to be added without disrupting existing connections.
+
+## Docker-compose Volume Definition and Usage (where necessary)
+The MongoDB service uses a named volume mongo-data mounted to /data/db to persist database state across container restarts. This is crucial for maintaining data integrity during development and testing. The volume is explicitly declared under the volumes: section to ensure clarity and avoid implicit behavior. During troubleshooting, a stale volume was identified as the cause of MongoDB’s exit code 62. This was resolved by removing the volume and rebuilding the container, confirming the importance of clean volume management. By using named volumes, the setup supports durability, isolation, and easy cleanup when needed.
+
+## Git Workflow Used to Achieve the Task
+The main branch is stable and production-ready. Semantic versioning was applied to Docker image tags (v1.0.0, v1.0.1, etc.), and redundant tags were retitled or removed to keep the Docker Hub registry clean. Commit messages were concise and descriptive, reflecting the purpose of each change (e.g., “Add build steps to docker-compose for local image creation”). This workflow supports parallel development, safe collaboration, and easy onboarding for new contributors.
+
