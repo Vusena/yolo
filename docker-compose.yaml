@@ -10,7 +10,7 @@
 version: '3.9'
 
 services:
-  # 🖥️ Frontend (React)
+  #  Frontend (React)
   client:
     image: vusenad/client:v1.0.0
     container_name: yolo-client
@@ -22,9 +22,9 @@ services:
     networks:
       - yolo-network
 
-  # ⚙️ Backend (Node + Express)
+  #  Backend (Node + Express)
   backend:
-    image: vusenad/yolo-backend:v1.0.0
+    image: vusenad/yolo-backend:v1.0.2
     container_name: yolo-backend  
   
     environment:
@@ -37,7 +37,7 @@ services:
     networks:
       - yolo-network
 
-  # 🗃️ Database (MongoDB)
+  # Database (MongoDB)
   mongodb:
     image: vusenad/yolo-db:v1.0.0
     container_name: mongodb
@@ -48,11 +48,11 @@ services:
     networks:
       - yolo-network
 
-# 🔗 Shared custom bridge network
+# Shared custom bridge network
 networks:
   yolo-network:
     driver: bridge
 
-# 💾 Named volume to persist database data
+# Named volume to persist database data
 volumes:
   mongo-data:

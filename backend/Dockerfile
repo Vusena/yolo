@@ -1,27 +1,14 @@
-# 🏗️ Build Stage
 FROM node:18-alpine AS build
-
-# Set working directory
-WORKDIR /usr/src/app
-
-# Install dependencies
+WORKDIR /app
 COPY package*.json ./
-RUN npm ci --production
-
-# Copy application code
+RUN npm ci --only=production
 COPY . .
 
-# 🧼 Production Stage
-FROM node:18-alpine AS production
-
-# Set working directory
+# Production image
+FROM alpine:3.20
 WORKDIR /app
+RUN apk add --no-cache nodejs
+COPY --from=build /app /app
 
-# Copy built app from build stage
-COPY --from=build /usr/src/app /app
-
-# Expose backend port
 EXPOSE 5000
-
-# Start the server
 CMD ["node", "server.js"]
