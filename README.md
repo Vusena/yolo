@@ -76,4 +76,11 @@ This provides a clean, reproducible environment for deploying the e-commerce app
 4. To SSH into the VM:
    vagrant ssh
 
+ ### Ansible Configuration Setup  
+After provisioning the Vagrant VM, the next step involves configuring Ansible to automate application deployment.
+Files Added:
+playbook.yml – The main Ansible playbook that defines how the YOLO app environment is configured and deployed.
+roles/ – Directory containing modular role definitions for each component (e.g., backend, frontend, and database).
+ansible.cfg – Ansible configuration file that defines the default inventory path, disables host key checking, and ensures Ansible uses the correct Python interpreter.
+hosts – The Ansible inventory file listing the target host (the Vagrant VM).
  

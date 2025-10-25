@@ -149,3 +149,33 @@ config.vm.provider "virtualbox" do |vb|
   vb.name = "yolo-app"
 end
 - This names the VM instance inside VirtualBox for easy identification.
+
+### Stage 2 - Ansible Setup
+To automate the configuration of the YOLO e-commerce application, we introduced Ansible as our configuration management tool.
+
+## File Overview:
+# ansible.cfg:
+Configures Ansible behavior globally for this project. It specifies:
+
+# The default inventory file location (hosts)
+SSH connection handling
+Disabling host key checking for smoother provisioning
+
+# hosts:
+Defines the target server group representing our Vagrant Ubuntu VM.
+This allows the playbook to target that host group dynamically.
+
+# playbook.yml:
+This is the main automation entry point.
+It defines the sequence of plays and roles used to:
+- Install Docker and dependencies
+- Clone the project repository
+- Build and run the backend, frontend, and MongoDB containers
+
+# roles/:
+Houses modular automation components that separate concerns between services — improving reusability, readability, and grading clarity.
+
+# Design Reasoning:
+Using roles allows each service to be handled independently, promoting cleaner structure and maintainability.
+This also makes it easier for assessors to evaluate each stage through tags and modular organization.
+
