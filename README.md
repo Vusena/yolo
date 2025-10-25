@@ -41,3 +41,39 @@ Downloaded the .deb file (e.g., mongodb-org-server_8.2.0_amd64.deb),
  try this command instead 
  -export NODE_OPTIONS=--openssl-legacy-provider
  -npm start
+
+
+
+
+
+ ## IP3 - CONFIGURATION MANAGEMENT
+ # Yolo App - Configuration Management Project (Stage 1)
+This project demonstrates automated environment setup using **Vagrant** and **Ansible** for a containerized e-commerce application.
+
+## Stage 1: Ansible Instrumentation
+
+### Step 1: Environment Setup
+I use **Vagrant** to provision an Ubuntu 20.04 virtual machine using Jeff Geerling’s image.  
+This provides a clean, reproducible environment for deploying the e-commerce application.
+
+### Technologies
+- **Vagrant** (Virtual Machine Provisioning)
+- **VirtualBox** (VM Provider)
+- **Ansible** (Configuration Management)
+- **Ubuntu 20.04 (geerlingguy/ubuntu2004)**
+
+### How to Run
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/Vusena/yolo
+   cd yolo-app
+2. Start the virtual machine:  
+   vagrant up
+3. Once provisioning completes, your VM will be running with:
+   Hostname: yolo-app
+   Forwarded port: 3000 (access via http://localhost:3000)
+   Ansible Playbook: playbook.yml (automatically triggered by Vagrant)
+4. To SSH into the VM:
+   vagrant ssh
+
+ 

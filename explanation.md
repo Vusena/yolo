@@ -117,3 +117,35 @@ The MongoDB service uses a named volume mongo-data mounted to /data/db to persis
 ## Git Workflow Used to Achieve the Task
 The main branch is stable and production-ready. Semantic versioning was applied to Docker image tags (v1.0.0, v1.0.1, etc.), and redundant tags were retitled or removed to keep the Docker Hub registry clean. Commit messages were concise and descriptive, reflecting the purpose of each change (e.g., “Add build steps to docker-compose for local image creation”). This workflow supports parallel development, safe collaboration, and easy onboarding for new contributors.
 
+
+
+ ## IP23- CONFIGURATION MANAGEMENT 
+# Explanation - Stage 1 (Vagrant Setup)
+## Objective
+The goal of this step is to set up a reproducible environment using **Vagrant** that provisions an Ubuntu 20.04 virtual machine. This VM will be configured and managed using **Ansible** to deploy a containerized e-commerce web application.
+
+## Vagrantfile Breakdown
+### 1. Base Box 
+config.vm.box = "geerlingguy/ubuntu2004"
+I use Jeff Geerling’s preconfigured Ubuntu 20.04 image, which is lightweight, stable, and widely supported for Ansible and Docker usage
+
+### 2. Hostname
+config.vm.hostname = "yolo-app"
+Assigning a hostname improves clarity in multi-VM setups and simplifies network identification.
+
+### 3. Port Forwarding
+config.vm.network "forwarded_port", guest: 3000, host: 3000
+This forwards port 3000 from the VM to the host machine, making the web application accessible through http://localhost:3000.
+
+### 4. Ansible Provisioner
+config.vm.provision "ansible" do |ansible|
+  ansible.playbook = "playbook.yml"
+end
+- This tells Vagrant to automatically invoke the Ansible playbook (playbook.yml) after the VM is up.
+The playbook will later handle tasks such as installing Docker, cloning the app repository, and deploying containers.
+ 
+### 5. VirtualBox Provider Settings
+config.vm.provider "virtualbox" do |vb|
+  vb.name = "yolo-app"
+end
+- This names the VM instance inside VirtualBox for easy identification.
