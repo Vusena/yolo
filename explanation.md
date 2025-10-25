@@ -238,4 +238,11 @@ It is applied to all hosts and ensures the environment is consistent and ready f
 - **Tags:** The role uses tags (`setup`, `common`, `utilities`) to allow selective execution when testing or debugging.
 - **Conditional execution:** The role only runs on Debian-based systems using `when: ansible_os_family == "Debian"`.
 
+## Common Docker Explanation
+- Installs all Docker dependencies and repositories.  
+   - Installs **Docker Engine**, **CLI**, and **Containerd**.  
+   - Downloads and configures **Docker Compose** binary.  
+   - Ensures Docker service is started and enabled at boot.  
+   - Tag: `docker`, `container`
+
 

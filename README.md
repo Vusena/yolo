@@ -131,7 +131,7 @@ Since this project only uses a single Vagrant-managed server, our `hosts` file i
 default ansible_host=127.0.0.1 ansible_port=2222
 
 ### STAGE 5: DEFINING ROLES
-## Role: Common
+## Role: common
 The **common** role prepares the base environment for the YOLO App. It ensures the system is updated and has essential packages required by subsequent roles.
 
 **Key tasks include:**
@@ -139,6 +139,14 @@ The **common** role prepares the base environment for the YOLO App. It ensures t
 - Installing essential utilities (curl, git, vim, unzip, htop)  
 - Ensuring the `app_user` exists  
 - Creating the project root directory
+
+## Role: docker 
+Automates the installation and configuration of Docker and Docker Compose.
+- Installs all prerequisites  
+- Adds Docker’s GPG key and APT repository  
+- Installs Docker Engine and CLI  
+- Downloads and sets up Docker Compose  
+- Starts and enables Docker service  
 
 
 

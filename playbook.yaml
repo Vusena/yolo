@@ -22,8 +22,8 @@
   roles:
     - role: common
       tags: ['common', 'setup']
-    # - role: docker
-    #   tags: ['docker', 'container']
+    - role: docker
+      tags: ['docker', 'container']
     # - role: backend
     #   tags: ['backend', 'app']
     # - role: frontend
