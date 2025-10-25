@@ -1,0 +1,41 @@
+---
+# playbook.yml
+# Main Ansible playbook for YOLO App Configuration Management Project
+# Stage 1: Infrastructure and Docker-based environment setup
+
+- name: Provision YOLO App environment
+  hosts: yolo
+  become: yes
+  vars_files:
+    - vars/main.yml   # Optional variable file (to be added later for bonus points)
+  vars:
+    app_user: ubuntu
+    project_root: /home/ubuntu/yolo-app
+
+  pre_tasks:
+    - name: Ensure system packages are updated
+      apt:
+        update_cache: yes
+      tags: 
+        - setup
+        - system
+
+  roles:
+    - role: common
+      tags: ['common', 'setup']
+    - role: docker
+      tags: ['docker', 'container']
+    - role: backend
+      tags: ['backend', 'app']
+    - role: frontend
+      tags: ['frontend', 'app']
+    - role: mongodb
+      tags: ['database', 'mongo']
+
+  post_tasks:
+    - block:
+        - name: Display success message
+          debug:
+            msg: "🎉 YOLO App environment setup completed successfully!"
+      tags: 
+        - confirmation

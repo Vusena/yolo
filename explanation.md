@@ -179,3 +179,44 @@ Houses modular automation components that separate concerns between services —
 Using roles allows each service to be handled independently, promoting cleaner structure and maintainability.
 This also makes it easier for assessors to evaluate each stage through tags and modular organization.
 
+### Stage 3
+## Explanation — YOLO App Ansible Configuration
+The playbook (`playbook.yml`) defines the automation logic for provisioning and deploying all components of the YOLO app stack — MongoDB, Backend (Node.js), and Frontend (React).
+
+## Structure Breakdown
+# Hosts
+The play targets the **`yolo`** host group, defined in the `hosts` inventory file.  
+This allows flexibility to add or change target machines without modifying the playbook.
+
+# Privilege Escalation
+`become: yes` ensures all critical setup tasks (like package installation or Docker setup) run with elevated privileges.
+
+# Variables
+We included both:
+- Inline variables (e.g., `app_user`, `project_root`)  
+- A separate variable file (`vars/main.yml`) for better maintainability and bonus marks.
+
+# Pre-Tasks
+The `pre_tasks` section updates package repositories before executing roles.  
+This ensures all subsequent installations use the latest available packages.
+
+# Tags applied:  
+`setup`, `system` → can be selectively run with:
+ansible-playbook playbook.yml --tags setup
+
+# Roles
+Each role modularizes a section of the configuration:
+
+common-Handles basic updates, utilities, and environment setup
+docker-Installs Docker Engine and configures Docker service
+backend-Deploys Node.js backend container
+frontend-Deploys React frontend container
+mongodb-Sets up MongoDB container and persistent data volume
+
+Tags enable running specific roles independently (e.g., only backend).
+
+# Post-Tasks and Blocks
+At the end of the play, we use a block in post_tasks that prints a success message.
+Blocks help group related tasks logically and improve readability.
+The confirmation tag can be used to run only this part for quick checks.
+
