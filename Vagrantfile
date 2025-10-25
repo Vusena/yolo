@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
 
   # Provisioner: Ansible playbook that will handle Docker setup and deployment
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "playbook.yaml"
   end
 
   # Provider: VirtualBox settings

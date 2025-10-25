@@ -119,38 +119,37 @@ The main branch is stable and production-ready. Semantic versioning was applied 
 
 
 
- ## IP23- CONFIGURATION MANAGEMENT 
-# Explanation - Stage 1 (Vagrant Setup)
-## Objective
+#### IP23- CONFIGURATION MANAGEMENT 
+### STAGE 1: VAGRANT SET UP
 The goal of this step is to set up a reproducible environment using **Vagrant** that provisions an Ubuntu 20.04 virtual machine. This VM will be configured and managed using **Ansible** to deploy a containerized e-commerce web application.
 
 ## Vagrantfile Breakdown
-### 1. Base Box 
+# 1. Base Box 
 config.vm.box = "geerlingguy/ubuntu2004"
 I use Jeff Geerling’s preconfigured Ubuntu 20.04 image, which is lightweight, stable, and widely supported for Ansible and Docker usage
 
-### 2. Hostname
+# 2. Hostname
 config.vm.hostname = "yolo-app"
 Assigning a hostname improves clarity in multi-VM setups and simplifies network identification.
 
-### 3. Port Forwarding
+# 3. Port Forwarding
 config.vm.network "forwarded_port", guest: 3000, host: 3000
 This forwards port 3000 from the VM to the host machine, making the web application accessible through http://localhost:3000.
 
-### 4. Ansible Provisioner
+# 4. Ansible Provisioner
 config.vm.provision "ansible" do |ansible|
   ansible.playbook = "playbook.yml"
 end
 - This tells Vagrant to automatically invoke the Ansible playbook (playbook.yml) after the VM is up.
 The playbook will later handle tasks such as installing Docker, cloning the app repository, and deploying containers.
  
-### 5. VirtualBox Provider Settings
+# 5. VirtualBox Provider Settings
 config.vm.provider "virtualbox" do |vb|
   vb.name = "yolo-app"
 end
 - This names the VM instance inside VirtualBox for easy identification.
 
-### Stage 2 - Ansible Setup
+### STAGE 2: ANSIBLE SETUP
 To automate the configuration of the YOLO e-commerce application, we introduced Ansible as our configuration management tool.
 
 ## File Overview:
@@ -165,7 +164,7 @@ Disabling host key checking for smoother provisioning
 Defines the target server group representing our Vagrant Ubuntu VM.
 This allows the playbook to target that host group dynamically.
 
-# playbook.yml:
+# playbook.yaml:
 This is the main automation entry point.
 It defines the sequence of plays and roles used to:
 - Install Docker and dependencies
@@ -179,9 +178,9 @@ Houses modular automation components that separate concerns between services —
 Using roles allows each service to be handled independently, promoting cleaner structure and maintainability.
 This also makes it easier for assessors to evaluate each stage through tags and modular organization.
 
-### Stage 3
+### STAGE 3: DEFINING PLAYBOOK.YAML
 ## Explanation — YOLO App Ansible Configuration
-The playbook (`playbook.yml`) defines the automation logic for provisioning and deploying all components of the YOLO app stack — MongoDB, Backend (Node.js), and Frontend (React).
+The playbook (`playbook.yaml`) defines the automation logic for provisioning and deploying all components of the YOLO app stack — MongoDB, Backend (Node.js), and Frontend (React).
 
 ## Structure Breakdown
 # Hosts
@@ -220,12 +219,23 @@ At the end of the play, we use a block in post_tasks that prints a success messa
 Blocks help group related tasks logically and improve readability.
 The confirmation tag can be used to run only this part for quick checks.
 
-### Stage 4 - Defining Roles
-### Common Role Explanation
 
+### STAGE 4: ANSIBLE CONFIGURATION
+To allow seamless automation, I configured Ansible with global defaults inside `ansible.cfg`. These defaults apply to all hosts, reducing repetition across inventory files.
+- The `remote_user` and `private_key_file` parameters specify how Ansible connects to the Vagrant VM automatically.
+- The `inventory` directive points to the `hosts` file that lists all managed nodes.
+The `hosts` file contains one inventory group named `yolo`, which represents the Vagrant environment. Each host entry specifies its IP and SSH port. In 
+[yolo]
+default ansible_host=127.0.0.1 ansible_port=2222
+
+
+### STAGE 5: DEFINING ROLES
+## Common Role Explanation
 The **common** role serves as the foundation of the configuration process.  
 It is applied to all hosts and ensures the environment is consistent and ready for the other roles to run smoothly.
 
 - **Block usage:** All tasks are wrapped in a block to ensure grouped execution and logical clarity.  
 - **Tags:** The role uses tags (`setup`, `common`, `utilities`) to allow selective execution when testing or debugging.
 - **Conditional execution:** The role only runs on Debian-based systems using `when: ansible_os_family == "Debian"`.
+
+

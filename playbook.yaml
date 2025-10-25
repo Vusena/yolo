@@ -6,8 +6,7 @@
 - name: Provision YOLO App environment
   hosts: yolo
   become: yes
-  vars_files:
-    - vars/main.yml   # Optional variable file (to be added later for bonus points)
+  
   vars:
     app_user: ubuntu
     project_root: /home/ubuntu/yolo-app
@@ -23,14 +22,14 @@
   roles:
     - role: common
       tags: ['common', 'setup']
-    - role: docker
-      tags: ['docker', 'container']
-    - role: backend
-      tags: ['backend', 'app']
-    - role: frontend
-      tags: ['frontend', 'app']
-    - role: mongodb
-      tags: ['database', 'mongo']
+    # - role: docker
+    #   tags: ['docker', 'container']
+    # - role: backend
+    #   tags: ['backend', 'app']
+    # - role: frontend
+    #   tags: ['frontend', 'app']
+    # - role: mongodb
+    #   tags: ['database', 'mongo']
 
   post_tasks:
     - block:
