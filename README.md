@@ -119,6 +119,15 @@ It uses **roles**, **variables**, **tags**, and **blocks** to ensure modular, re
 1. Start the virtual machine:
    vagrant up
 
+### Step 4 Defining Roles 
+### Role: Common
+The **common** role prepares the base environment for the YOLO App. It ensures the system is updated and has essential packages required by subsequent roles.
+
+**Key tasks include:**
+- Updating and upgrading system packages  
+- Installing essential utilities (curl, git, vim, unzip, htop)  
+- Ensuring the `app_user` exists  
+- Creating the project root directory  
 
 
  

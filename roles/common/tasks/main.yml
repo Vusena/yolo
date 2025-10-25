@@ -1,0 +1,34 @@
+---
+# roles/common/tasks/main.yml
+
+- block:
+    - name: Update and upgrade system packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install essential utilities
+      apt:
+        name:
+          - curl
+          - git
+          - vim
+          - unzip
+          - htop
+        state: present
+
+    - name: Ensure app user exists
+      user:
+        name: "{{ app_user }}"
+        state: present
+        shell: /bin/bash
+
+    - name: Create project directory
+      file:
+        path: "{{ project_root }}"
+        state: directory
+        owner: "{{ app_user }}"
+        mode: '0755'
+
+  when: ansible_os_family == "Debian"
+  tags: ['common', 'setup']

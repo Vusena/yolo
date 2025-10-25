@@ -220,3 +220,12 @@ At the end of the play, we use a block in post_tasks that prints a success messa
 Blocks help group related tasks logically and improve readability.
 The confirmation tag can be used to run only this part for quick checks.
 
+### Stage 4 - Defining Roles
+### Common Role Explanation
+
+The **common** role serves as the foundation of the configuration process.  
+It is applied to all hosts and ensures the environment is consistent and ready for the other roles to run smoothly.
+
+- **Block usage:** All tasks are wrapped in a block to ensure grouped execution and logical clarity.  
+- **Tags:** The role uses tags (`setup`, `common`, `utilities`) to allow selective execution when testing or debugging.
+- **Conditional execution:** The role only runs on Debian-based systems using `when: ansible_os_family == "Debian"`.
