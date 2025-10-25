@@ -24,8 +24,8 @@
       tags: ['common', 'setup']
     - role: docker
       tags: ['docker', 'container']
-    # - role: backend
-    #   tags: ['backend', 'app']
+    - role: backend
+      tags: ['backend', 'app']
     # - role: frontend
     #   tags: ['frontend', 'app']
     # - role: mongodb

@@ -238,11 +238,20 @@ It is applied to all hosts and ensures the environment is consistent and ready f
 - **Tags:** The role uses tags (`setup`, `common`, `utilities`) to allow selective execution when testing or debugging.
 - **Conditional execution:** The role only runs on Debian-based systems using `when: ansible_os_family == "Debian"`.
 
-## Common Docker Explanation
+## Docker Role Explanation
 - Installs all Docker dependencies and repositories.  
-   - Installs **Docker Engine**, **CLI**, and **Containerd**.  
-   - Downloads and configures **Docker Compose** binary.  
-   - Ensures Docker service is started and enabled at boot.  
-   - Tag: `docker`, `container`
+- Installs **Docker Engine**, **CLI**, and **Containerd**.  
+- Downloads and configures **Docker Compose** binary.  
+- Ensures Docker service is started and enabled at boot.  
+- Tag: `docker`, `container`
+
+## Backend Role Explanation
+This role automates packaging and running the YOLO backend application using Docker.
+The process:
+1. Transfers the backend application and Dockerfile to the managed node.
+2. Builds the backend Docker image from the provided Node.js Dockerfile.
+3. Starts a container named `yolo-backend` that runs `server.js` on port `5000`.
+This ensures a consistent Node.js runtime and isolates dependencies from the host system.
+
 
 
