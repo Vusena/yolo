@@ -1,0 +1,39 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for mongodb
+
+- name: Ensure mongodb data directory exists
+  file:
+    path: /home/ubuntu/mongodb
+    state: directory
+    mode: '0755'
+
+- name: Copy MongoDB Dockerfile to target host
+  copy:
+    src: mongodb/Dockerfile
+    dest: /home/ubuntu/mongodb/Dockerfile
+
+- name: Copy MongoDB configuration files (if any)
+  copy:
+    src: mongodb/
+    dest: /home/ubuntu/mongodb/
+    mode: '0755'
+
+- name: Build MongoDB Docker image
+  community.docker.docker_image:
+    name: yolo-mongo
+    source: build
+    build:
+      path: /home/ubuntu/mongodb
+    state: present
+
+- name: Run MongoDB container
+  community.docker.docker_container:
+    name: yolo-mongo
+    image: yolo-mongo
+    state: started
+    restart_policy: always
+    published_ports:
+      - "27017:27017"
+    volumes:
+      - /home/ubuntu/mongo-data:/data/db

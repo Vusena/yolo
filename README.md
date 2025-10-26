@@ -168,6 +168,18 @@ This role handles deployment of the YOLO client React frontend.
 **Tag to run:**
 ansible-playbook playbook.yaml --tags "client"
 
+## MongoDB Role
+This role handles deployment of the YOLO MongoDB database.
+# Tasks performed:
+1. Creates the `/home/ubuntu/mongodb` directory on the target host.
+2. Copies MongoDB Dockerfile and configuration files to the host.
+3. Builds a Docker image named `yolo-mongo`.
+4. Runs the container exposing port `27017` and mounts persistent storage at `/home/ubuntu/mongo-data`.
+
+**Tag to run:**
+ansible-playbook playbook.yaml --tags "mongodb"
+
+
 
 
 

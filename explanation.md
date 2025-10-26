@@ -262,6 +262,16 @@ The process:
 4. Starts a container named `yolo-client` that serves the frontend via Nginx on port `3000`.
 This isolates the frontend from the host system and provides a consistent runtime for the React application.
 
+## MongoDB Role Explanation
+This role automates the deployment of the YOLO MongoDB service using Docker.
+The process:
+1. Ensures the target directory exists for MongoDB.
+2. Transfers the Dockerfile and any configuration files to the managed node.
+3. Builds a Docker image from the provided MongoDB Dockerfile.
+4. Starts a container named `yolo-mongo` with port `27017` exposed and persistent data stored in `/home/ubuntu/mongo-data`.
+This ensures the database runs in an isolated environment and maintains data across container restarts.
+
+
 
 
 

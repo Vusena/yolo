@@ -28,8 +28,8 @@
       tags: ['backend', 'app']
     - role: client
       tags: ['client', 'app']
-    # - role: mongodb
-    #   tags: ['database', 'mongo']
+    - role: mongodb
+      tags: ['database', 'mongo']
 
   post_tasks:
     - block:
