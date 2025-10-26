@@ -199,8 +199,19 @@ Exposes port 27017 to the host.
 Environment variables for credentials are defined in roles/mongodb/vars/main.yml.
 Automatically restarts on system reboot or failure.
 
+## Docker Networking
+This project deploys a modular client-backend-MongoDB stack using Docker containers orchestrated via Ansible.
+## Architecture Overview
+- **Client**: React-based frontend served via Docker
+- **Backend**: Node.js API container
+- **MongoDB**: Database container with persistent volume and credentials
+- **Docker Network**: All containers are connected via a shared network (`yolo-net`) for internal communication
 
-
+## Internal Communication
+- Backend connects to MongoDB via:  
+  `mongodb://<user>:<password>@yolo-mongodb:27017`
+- Client connects to backend via:  
+  `http://yolo-backend:5000`
 
 
 

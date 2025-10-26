@@ -19,3 +19,5 @@
     restart_policy: always
     published_ports:
       - "5000:5000"
+    networks:
+      - name: yolo-net  

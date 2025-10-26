@@ -308,5 +308,18 @@ This role was improved to use variables for image details, port, credentials, an
 By referencing the image vusenad/yolo-db:v1.0.0, the setup ensures consistency and avoids rebuilding locally.
 The persistent directory /home/ubuntu/mongodb guarantees data durability even after container recreation.
 
+## Docker Networking Explanation
+To enable seamless communication between containers (client, backend, MongoDB) without exposing internal services to the public network.
+
+## Strategy
+We use a custom Docker bridge network called `yolo-net`. This allows containers to resolve each other by name using Docker's internal DNS.
+
+## Implementation
+### 1. Create Network
+In `roles/common/tasks/main.yml`:
+- name: Create shared Docker network for yolo stack
+  community.docker.docker_network:
+    name: yolo-net
+    state: present
 
 

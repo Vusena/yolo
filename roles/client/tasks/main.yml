@@ -23,3 +23,5 @@
     restart_policy: always
     published_ports:
       - "80:80"
+    networks:
+      - name: yolo-net
