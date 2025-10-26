@@ -253,5 +253,15 @@ The process:
 3. Starts a container named `yolo-backend` that runs `server.js` on port `5000`.
 This ensures a consistent Node.js runtime and isolates dependencies from the host system.
 
+## Client Role Explanation
+This role automates packaging and running the YOLO frontend application using Docker.
+The process:
+1. Ensures the target directory exists for the client application.
+2. Transfers the React source code and Dockerfile to the managed node.
+3. Builds a Docker image from the provided Dockerfile for React.
+4. Starts a container named `yolo-client` that serves the frontend via Nginx on port `3000`.
+This isolates the frontend from the host system and provides a consistent runtime for the React application.
+
+
 
 

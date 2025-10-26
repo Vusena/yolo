@@ -149,12 +149,24 @@ Automates the installation and configuration of Docker and Docker Compose.
 - Starts and enables Docker service  
 
 ## Role: backend
-#### Tasks performed:
+# Tasks performed:
 - Copies the backend source code and Dockerfile to the remote host.
 - Builds a Docker image named `yolo-backend`.
 - Runs the container exposing port `5000`.
+
 **Tag to run:**
 ansible-playbook playbook.yaml --tags "backend"
+
+## Role: client
+This role handles deployment of the YOLO client React frontend.
+# Tasks performed:
+1. Creates the `/home/ubuntu/client` directory on the target host.
+2. Copies the React source code and Dockerfile to the host.
+3. Builds a Docker image named `yolo-client`.
+4. Runs the container exposing port `3000` mapped to container port `80`.
+
+**Tag to run:**
+ansible-playbook playbook.yaml --tags "client"
 
 
 

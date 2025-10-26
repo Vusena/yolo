@@ -1,3 +1,37 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for client
+
+- name: Ensure client directory exists
+  file:
+    path: /home/ubuntu/client
+    state: directory
+    mode: '0755'
+
+- name: Copy client Dockerfile to target host
+  copy:
+    src: client/Dockerfile
+    dest: /home/ubuntu/client/Dockerfile
+
+- name: Copy client source files
+  copy:
+    src: client/
+    dest: /home/ubuntu/client/
+    mode: '0755'
+
+- name: Build client Docker image
+  community.docker.docker_image:
+    name: yolo-client
+    source: build
+    build:
+      path: /home/ubuntu/client
+    state: present
+
+- name: Run client container
+  community.docker.docker_container:
+    name: yolo-client
+    image: yolo-client
+    state: started
+    restart_policy: always
+    published_ports:
+      - "3000:80"
