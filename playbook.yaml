@@ -26,8 +26,8 @@
       tags: ['docker', 'container']
     - role: backend
       tags: ['backend', 'app']
-    # - role: frontend
-    #   tags: ['frontend', 'app']
+    - role: client
+      tags: ['client', 'app']
     # - role: mongodb
     #   tags: ['database', 'mongo']
 
