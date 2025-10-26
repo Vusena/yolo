@@ -2,26 +2,30 @@
 ---
 # tasks file for mongodb
 
-- name: Ensure mongodb data directory exists
+- name: Ensure MongoDB data directory exists
   file:
-    path: /home/ubuntu/mongodb
+    path: "{{ mongo_data_dir }}"
     state: directory
     mode: '0755'
 
 - name: Pull MongoDB image from Docker Hub
   community.docker.docker_image:
-    name: vusenad/yolo-db
-    tag: v1.0.0
+    name: "{{ mongo_image }}"
+    tag: "{{ mongo_tag }}"
     source: pull
     state: present
 
-- name: Run MongoDB container
+- name: Run MongoDB container with persistent volume and credentials
   community.docker.docker_container:
     name: yolo-mongodb
-    image: vusenad/yolo-db:v1.0.0
+    image: "{{ mongo_image }}:{{ mongo_tag }}"
     state: started
     restart_policy: always
     published_ports:
-      - "27017:27017"
+      - "{{ mongo_port }}:{{ mongo_port }}"
     volumes:
-      - /data/db:/data/db
+      - "{{ mongo_data_dir }}:/data/db"
+    env:
+      MONGO_INITDB_ROOT_USERNAME: "{{ mongo_root_user }}"
+      MONGO_INITDB_ROOT_PASSWORD: "{{ mongo_root_password }}"
+

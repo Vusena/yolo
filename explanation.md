@@ -302,7 +302,11 @@ Screenshots of these steps are stored in the `pulic/` directory:
 - ![running containers](client/public/docker.png)
 - ![Yolo Client Application](client/public/yoloclientUI.png)
 
-
+## Update for explanation.md
+MongoDB Role Enhancement
+This role was improved to use variables for image details, port, credentials, and volume paths.
+By referencing the image vusenad/yolo-db:v1.0.0, the setup ensures consistency and avoids rebuilding locally.
+The persistent directory /home/ubuntu/mongodb guarantees data durability even after container recreation.
 
 
 

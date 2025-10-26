@@ -192,6 +192,12 @@ http://localhost:3000
 The Yolo Client UI successfully loaded.
 ![Yolo Client Application](client/public/yoloclientUI.png)
 
+## Update on MongoDB Role
+Uses the Docker image vusenad/yolo-db:v1.0.0 from Docker Hub.
+Creates a persistent data directory /home/ubuntu/mongodb.
+Exposes port 27017 to the host.
+Environment variables for credentials are defined in roles/mongodb/vars/main.yml.
+Automatically restarts on system reboot or failure.
 
 
 

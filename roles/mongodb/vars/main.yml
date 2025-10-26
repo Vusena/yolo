@@ -1,3 +1,11 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # vars file for mongodb
+mongo_image: vusenad/yolo-db
+mongo_tag: v1.0.0
+mongo_data_dir: /home/ubuntu/mongodb
+mongo_port: "27017"
+mongo_root_user: root
+mongo_root_password: secret
+
+
