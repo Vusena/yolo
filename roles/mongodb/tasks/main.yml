@@ -8,32 +8,20 @@
     state: directory
     mode: '0755'
 
-- name: Copy MongoDB Dockerfile to target host
-  copy:
-    src: mongodb/Dockerfile
-    dest: /home/ubuntu/mongodb/Dockerfile
-
-- name: Copy MongoDB configuration files (if any)
-  copy:
-    src: mongodb/
-    dest: /home/ubuntu/mongodb/
-    mode: '0755'
-
-- name: Build MongoDB Docker image
+- name: Pull MongoDB image from Docker Hub
   community.docker.docker_image:
-    name: yolo-mongo
-    source: build
-    build:
-      path: /home/ubuntu/mongodb
+    name: vusenad/yolo-db
+    tag: v1.0.0
+    source: pull
     state: present
 
 - name: Run MongoDB container
   community.docker.docker_container:
-    name: yolo-mongo
-    image: yolo-mongo
+    name: yolo-mongodb
+    image: vusenad/yolo-db:v1.0.0
     state: started
     restart_policy: always
     published_ports:
       - "27017:27017"
     volumes:
-      - /home/ubuntu/mongo-data:/data/db
+      - /data/db:/data/db

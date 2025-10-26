@@ -179,6 +179,21 @@ This role handles deployment of the YOLO MongoDB database.
 **Tag to run:**
 ansible-playbook playbook.yaml --tags "mongodb"
 
+### Verification & Evidence
+After updating the Ansible playbook to pull prebuilt Docker images from Docker Hub instead of building them locally, the application was successfully deployed using:
+
+vagrant up
+Once provisioning completed, all containers were confirmed to be running:
+![running containers](client/public/docker.png)
+
+
+Once open your browser and visit:
+http://localhost:3000
+The Yolo Client UI successfully loaded.
+![Yolo Client Application](client/public/yoloclientUI.png)
+
+
+
 
 
 

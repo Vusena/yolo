@@ -8,30 +8,18 @@
     state: directory
     mode: '0755'
 
-- name: Copy client Dockerfile to target host
-  copy:
-    src: client/Dockerfile
-    dest: /home/ubuntu/client/Dockerfile
-
-- name: Copy client source files
-  copy:
-    src: client/
-    dest: /home/ubuntu/client/
-    mode: '0755'
-
-- name: Build client Docker image
+- name: Pull client image from Docker Hub
   community.docker.docker_image:
-    name: yolo-client
-    source: build
-    build:
-      path: /home/ubuntu/client
+    name: vusenad/client
+    tag: v1.0.0
+    source: pull
     state: present
 
 - name: Run client container
   community.docker.docker_container:
     name: yolo-client
-    image: yolo-client
+    image: vusenad/client:v1.0.0
     state: started
     restart_policy: always
     published_ports:
-      - "3000:80"
+      - "80:80"

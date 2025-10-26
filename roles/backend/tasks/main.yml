@@ -1,33 +1,20 @@
----
 - name: Ensure backend directory exists
   file:
     path: /home/ubuntu/backend
     state: directory
     mode: '0755'
 
-- name: Copy backend Dockerfile to target host
-  copy:
-    src: backend/Dockerfile
-    dest: /home/ubuntu/backend/Dockerfile
-
-- name: Copy backend source files
-  copy:
-    src: backend/
-    dest: /home/ubuntu/backend/
-    mode: '0755'
-
-- name: Build backend Docker image
+- name: Pull backend image from Docker Hub
   community.docker.docker_image:
-    name: yolo-backend
-    source: build
-    build:
-      path: /home/ubuntu/backend
+    name: vusenad/yolo-backend
+    tag: v1.0.1
+    source: pull
     state: present
 
 - name: Run backend container
   community.docker.docker_container:
     name: yolo-backend
-    image: yolo-backend
+    image: vusenad/yolo-backend:v1.0.1
     state: started
     restart_policy: always
     published_ports:

@@ -119,7 +119,7 @@ The main branch is stable and production-ready. Semantic versioning was applied 
 
 
 
-#### IP23- CONFIGURATION MANAGEMENT 
+#### IP3- CONFIGURATION MANAGEMENT 
 ### STAGE 1: VAGRANT SET UP
 The goal of this step is to set up a reproducible environment using **Vagrant** that provisions an Ubuntu 20.04 virtual machine. This VM will be configured and managed using **Ansible** to deploy a containerized e-commerce web application.
 
@@ -270,6 +270,37 @@ The process:
 3. Builds a Docker image from the provided MongoDB Dockerfile.
 4. Starts a container named `yolo-mongo` with port `27017` exposed and persistent data stored in `/home/ubuntu/mongo-data`.
 This ensures the database runs in an isolated environment and maintains data across container restarts.
+
+
+Initially, the Ansible playbook built Docker images for the backend and client directly on the VM.  
+While functional, this approach had several drawbacks:
+
+- **Long provisioning time** due to source copying and Docker builds on the target host.
+- **Inconsistent environments** — image builds depended on local machine configuration.
+- **Larger Vagrant/Ansible overhead** when syncing files during each run.
+
+To optimize deployment, we switched to **pulling prebuilt images** from Docker Hub:
+- **Backend Image:** `vusenad/yolo-backend:v1.0.1`  
+- **Client Image:** `vusenad/client:v1.0.0`  
+- **Database Image:** `postgres:15-alpine`
+
+This ensures:
+- Consistency across all developer environments.
+- Faster provisioning since images are pulled directly.
+- Simplified playbook with no need for build context management.
+
+---
+
+## Validation
+After implementing the change:
+1. Ran `vagrant up` to provision the VM.  
+2. Verified that all containers were up using `docker ps`.  
+3. Accessed the client app on [http://localhost:3000](http://localhost:3000).  
+4. Confirmed that the backend API responded correctly on port `5000`.
+
+Screenshots of these steps are stored in the `pulic/` directory:
+- ![running containers](client/public/docker.png)
+- ![Yolo Client Application](client/public/yoloclientUI.png)
 
 
 
