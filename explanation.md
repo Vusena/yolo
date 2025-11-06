@@ -333,3 +333,11 @@ The frontend is exposed using a LoadBalancer service. This is ideal for GKE and 
 No persistent storage was required for the frontend at this stage, as it is a stateless React application.
 
 
+## 5. Debugging Measures
+To confirm successful deployment:
+- I ran `kubectl get all -n yolo-frontend` to verify pod and service status.
+- I used `minikube service yolo-frontend-service -n yolo-frontend` to expose the app and confirm browser access.
+- I checked logs and pod events if any issues arose.
+# this is a screenshot of the running frontend pods
+
+![running frontend ](client/public/frontendpods.png)
