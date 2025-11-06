@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yolo-frontend-deployment
+  namespace: yolo-frontend
+  labels:
+    app: yolo-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: yolo-frontend
+  template:
+    metadata:
+      labels:
+        app: yolo-frontend
+    spec:
+      containers:
+        - name: yolo-frontend
+          image: vusenad/client:v1.0.0
+          ports:
+            - containerPort: 80

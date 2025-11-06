@@ -322,4 +322,14 @@ In `roles/common/tasks/main.yml`:
     name: yolo-net
     state: present
 
+  #### FRONTEND DEPLOYMENT ON GKE 
+## 1. Choice of Kubernetes Objects
+I used a Deployment to manage the React frontend pods, ensuring high availability with 2 replicas. A Namespace (`yolo-frontend`) was added to isolate the frontend from other components. The Service object is of type `LoadBalancer`, which allows external access to the application.
+
+## 2. Method Used to Expose Pods
+The frontend is exposed using a LoadBalancer service. This is ideal for GKE and Minikube environments, providing a public IP for browser access. It simplifies testing and avoids manual port forwarding.
+
+## 3. Use-of or Lack-of Persistent Storage
+No persistent storage was required for the frontend at this stage, as it is a stateless React application.
+
 

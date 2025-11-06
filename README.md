@@ -214,6 +214,15 @@ This project deploys a modular client-backend-MongoDB stack using Docker contain
   `http://yolo-backend:5000`
 
 
+##### YOLO FRONTEND DEPLOYMENT ON GKE
+I have created three files under the frontend folder to facilate deployment of the React frontend using Kubernetes manifests on Google Kubernetes Engine (GKE). It uses a Docker image hosted on Docker Hub and exposes the application via a LoadBalancer service.
+
+# Folder Structure
+yolo-manifests/
+└── frontend/
+    ├── namespace.yaml
+    ├── deployment.yaml
+    ├── service.yaml
 
 
 
