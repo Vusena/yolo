@@ -280,3 +280,19 @@ kubectl apply -f manifests/backend/service.yaml
 
 ## Verification
 kubectl get all -n yolo-backend
+
+### Database Deployment (MongoDB with StatefulSet)
+This phase deploys MongoDB using a StatefulSet and PersistentVolumeClaim to ensure data durability and stable pod identity. The database is exposed internally to the backend via a headless service.
+
+## Deployment Instructions
+Apply the manifests in order:
+
+kubectl apply -f manifests/database/namespace.yaml
+kubectl apply -f manifests/database/pvc.yaml
+kubectl apply -f manifests/database/statefulset.yaml
+kubectl apply -f manifests/database/service.yaml
+# Verification
+bash
+kubectl get all -n yolo-db
+kubectl get pvc -n yolo-db
+kubectl describe pod yolo-db-0 -n yolo-db
