@@ -340,7 +340,7 @@ To confirm successful deployment:
 - I checked logs and pod events if any issues arose.
 # this is a screenshot of the running frontend pods
 
-![running frontend ](client/public/frontendpods.png)
+![running frontend pods ](client/public/frontendpods.png)
 
 #### BACKEND DEPLOYMENT ON GKE 
 ## Kubernetes Backend Manifests Explained
@@ -362,3 +362,23 @@ Resource Type: Deployment
 - Type: `ClusterIP`
 - Purpose: The `ClusterIP` service exposes the backend pods only internally within the cluster. This is the correct choice because the public user traffic flows through the frontend, which then communicates with the backend. Exposing the backend publicly is unnecessary and insecure.
 - Selector Mechanism: The Service uses the `selector` field (`app: yolo-backend`) to identify and load balance traffic across the two running pods created by the Deployment.
+
+### Backend Deployment Architecture
+1. Kubernetes Objects Used
+Namespace: yolo-backend isolates backend resources.
+Deployment: Runs 2 replicas of the backend container with labels for tracking (tier, purpose, app).
+Service (ClusterIP): Exposes the backend internally to the frontend, avoiding public exposure.
+
+2. Exposure Method
+Used a ClusterIP service to restrict backend access to internal cluster traffic. This ensures security and aligns with best practices for microservice communication.
+
+3. Persistent Storage
+No persistent storage is required at this stage. The backend is stateless and relies on MongoDB for data persistence, which will be addressed in Phase 3.
+
+4. Debugging Measures
+Verified deployment using:
+kubectl get all -n yolo-backend to confirm pod and service status
+Checked logs and events for container readiness
+Confirmed internal DNS resolution for service name
+
+![running backend pods ](client/public/backend_pods.png)
