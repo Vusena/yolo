@@ -341,3 +341,24 @@ To confirm successful deployment:
 # this is a screenshot of the running frontend pods
 
 ![running frontend ](client/public/frontendpods.png)
+
+#### BACKEND DEPLOYMENT ON GKE 
+## Kubernetes Backend Manifests Explained
+This phase introduces the foundational Kubernetes objects necessary to run the Yolo Backend API. The core focus is on isolation, scalability, and internal connectivity.
+
+## 1. Isolation with `namespace.yaml`
+Resource Type: Namespace
+Purpose: The yolo-backend namespace creates a logical grouping for all backend-related resources (Pods, Deployments, Services). This prevents naming conflicts and makes managing, monitoring, and applying security policies to the backend components much simpler. It's a key best practice for mult-tiered applications in Kubernetes.
+
+### 2. Scalability with deployment.yaml
+Resource Type: Deployment
+- Purpose: The Deployment manages two replicas of the backend application, ensuring high availability. If one pod fails, Kubernetes automatically    creates  a replacement.
+- Labels: The use of descriptive labels ( `app: yolo-backend`, `tier: backend`, `purpose: api`) is critical. They are used by the Service to route traffic and are often required for tracking and reporting in advanced monitoring systems or for satisfying specific project rubrics.
+- Connectivity: The `MONGODB_URI` environment variable is defined here, using the fully qualified domain name (FQDN) of the future database service (`yolo-db-service.yolo-db.svc.cluster.local`). This is how microservices discover and communicate with each other inside the cluster.
+- Resource Management: Explicitly setting `requests` (guaranteed minimum) and `limits` (hard maximum) for CPU and memory ensures the pods are scheduled efficiently and prevents a single pod from consuming excessive cluster resources (the "noisy neighbor" problem).
+
+### 3. Internal Exposure with `service.yaml`
+- Resource Type: `Service`
+- Type: `ClusterIP`
+- Purpose: The `ClusterIP` service exposes the backend pods only internally within the cluster. This is the correct choice because the public user traffic flows through the frontend, which then communicates with the backend. Exposing the backend publicly is unnecessary and insecure.
+- Selector Mechanism: The Service uses the `selector` field (`app: yolo-backend`) to identify and load balance traffic across the two running pods created by the Deployment.

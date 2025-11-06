@@ -215,6 +215,7 @@ This project deploys a modular client-backend-MongoDB stack using Docker contain
 
 
 ##### YOLO FRONTEND DEPLOYMENT ON GKE
+### Phase 1: Frontend Kubernetes Manifests
 I have created three files under the frontend folder to facilate deployment of the React frontend using Kubernetes manifests on Google Kubernetes Engine (GKE). It uses a Docker image hosted on Docker Hub and exposes the application via a LoadBalancer service.
 
 ## Folder Structure
@@ -233,4 +234,49 @@ kubectl apply -f frontend/service.yaml
 kubectl get pods -n yolo-frontend
 kubectl get svc -n yolo-frontend
 
- 
+### Phase 2:  Backend Kubernetes Manifests
+This phase focuses on deploying the Yolo application backend API within its own isolated Kubernetes Namespace. The backend uses a simple Deployment for horizontal scaling and a ClusterIP Service to expose it internally to the frontend component.
+
+##  Directory Structure
+The files for this phase are located under `manifests/backend/`
+
+## Manifest Details
+# 1. namespace.yaml
+Isolates all backend resources for better organization and security.
+
+apiVersion: v1service.yaml
+Creates an internal ClusterIP Service to allow the frontend to communicate with the backend API.
+
+Type: ClusterIP (The backend should not be publicly accessible).
+
+Selector: Targets pods with the label app: yolo-backend.
+
+Internal Access: The frontend can reach this service via the internal DNS name: yolo-backend-service.yolo-backend.svc.cluster.local:5000.
+kind: Namespace
+metadata:
+name: yolo-backend
+
+ # 2. deployment.yaml
+Deploys the backend container image (vusenad/yolo-backend:v1.0.2) with 2 replicas and defines resource limits/requests.
+Namespace: yolo-backend
+Replicas: 2
+Container Port: 5000
+Environment Variables:
+PORT: 5000
+MONGODB_URI: mongodb://yolo-db-service.yolo-db.svc.cluster.local:27017/yolomy (Placeholder for the internal database service)
+Labels: app: yolo-backend, tier: backend, purpose: api (Crucial for identification and rubric tracking).
+Resource Management: Sets best-practice resource requests and limits.
+
+# 3. Service.yaml
+Creates an internal ClusterIP Service to allow the frontend to communicate with the backend API.
+Type: ClusterIP (The backend should not be publicly accessible).
+Selector: Targets pods with the label app: yolo-backend.
+Internal Access: The frontend can reach this service via the internal DNS name: yolo-backend-service.yolo-backend.svc.cluster.local:5000.
+
+ ## Deployment Steps 
+ kubectl apply -f manifests/backend/namespace.yaml
+kubectl apply -f manifests/backend/deployment.yaml
+kubectl apply -f manifests/backend/service.yaml
+
+## Verification
+kubectl get all -n yolo-backend

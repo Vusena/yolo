@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yolo-backend-deployment
+  namespace: yolo-backend
+  labels:
+    app: yolo-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: yolo-backend
+  template:
+    metadata:
+      labels:
+        app: yolo-backend
+        tier: backend
+        purpose: api
+      annotations:
+        description: "Backend API for Yolo application"
+    spec:
+      containers:
+        - name: yolo-backend
+          image: vusenad/yolo-backend:v1.0.2
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+            - name: MONGODB_URI
+              value: "mongodb://yolo-db-service.yolo-db.svc.cluster.local:27017/yolomy"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
