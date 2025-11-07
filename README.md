@@ -561,7 +561,7 @@ Remember to rebuild/restart the frontend after updating .env:npm run build
 ## Live Application
 The Yolo App is now running and fully functional. You can access the live version here:
 [**Live Demo → http://34.29.233.40/#products**](http://34.29.233.40/#products)
-✅ The app correctly persists products to the backend database, as verified by testing the product add/edit/delete functionalities.  
+The app correctly persists products to the backend database, as verified by testing the product add/edit/delete functionalities.  
 
 ![Yolo App Screenshot](client/public/liveapp.png)  
 *Screenshot demonstrates product persistence and app functionality.*

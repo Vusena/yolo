@@ -775,6 +775,9 @@ This approach enables external access to the backend without exposing localhost 
 The Yolo App is now running and accessible at:
 [http://34.29.233.40/#products](http://34.29.233.40/#products)
 
+![Yolo App Screenshot](client/public/liveapp.png)  
+*Screenshot demonstrates product persistence and app functionality.*
+
 The app correctly persists products to the backend database.
 
 ## Environment Change
