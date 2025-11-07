@@ -4,7 +4,7 @@ metadata:
   name: yolo-backend-service
   namespace: yolo-backend
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: yolo-backend
   ports:

@@ -528,6 +528,36 @@ Outcome
 The frontend is now live, running in the yolo-frontend namespace with two pods and a public-facing LoadBalancer. It is ready to serve UI traffic and connect to the backend service.
 ![gke_setup](client/public/frontendlink.png) 
 
+# Frontend configuration:
+Updated the .env file in your React frontend to point to the backend service inside your Kubernetes cluster:
+REACT_APP_API_URL=http://yolo-backend-service.yolo-backend.svc.cluster.local:5000
+
+## Frontend code changes: Your React ProductControl component now uses this environment variable to make API calls using Axios.
+Deployment note: You need to apply the Kubernetes changes so that the backend service is correctly exposed and reachable, and then rebuild/redeploy your frontend if you want it to pick up the new .env values.
+
+# Yolo App — Frontend & Backend Integration
+## Environment Configuration
+
+1. Open the frontend `.env` file (inside `client/` folder):
+REACT_APP_API_URL=http://yolo-backend-service.yolo-backend.svc.cluster.local:5000
+
+2. Update it to use the LoadBalancer external IP provided by the backend service:
+REACT_APP_API_URL=http://136.116.230.179:5000
+This allows the frontend running locally or in another environment to communicate with the backend via the LoadBalancer.
+
+3. Backend Verification
+Check that the backend service is running and has an external IP:kubectl get svc -n yolo-backend
+NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)          AGE
+yolo-backend-service   LoadBalancer   34.118.236.83   136.116.230.179   5000:31885/TCP   54m
+Use the EXTERNAL-IP in the frontend .env to enable external access.
+
+Notes:
+Using the LoadBalancer IP allows testing from outside Kubernetes.
+For cluster-internal communication, you can still use the internal DNS:
+http://yolo-backend-service.yolo-backend.svc.cluster.local:5000
+Remember to rebuild/restart the frontend after updating .env:npm run build
+
+
 
 
 

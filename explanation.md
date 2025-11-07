@@ -739,9 +739,36 @@ Users can access the frontend via the external IP on port 80.
 ### Outcome
 The Yolo frontend is successfully deployed in a dedicated namespace with two running pods and a public-facing LoadBalancer service. 
 This setup enables external access to the UI and supports communication with backend services.
+The frontend can be accessed through 
+
+** http://34.29.233.40**
 
 ![gke_setup](client/public/frontendlink.png) 
 
+# Explanation of Environment Change
+
+## Original Setup
+- Frontend environment variable:
+REACT_APP_API_URL=http://yolo-backend-service.yolo-backend.svc.cluster.local:5000
+Issue: This URL works only inside Kubernetes pods. Local browsers or external clients cannot resolve the internal Kubernetes DNS.
+
+## Change Made
+Updated .env in the frontend to use the LoadBalancer external IP assigned by Kubernetes:REACT_APP_API_URL=http://136.116.230.179:5000
+This IP comes from the EXTERNAL-IP column in:kubectl get svc -n yolo-backend
+Purpose: Allow the frontend to communicate with the backend from outside the cluster, e.g., local development or testing environments.
+
+## Effect on Axios Requests
+All API calls in React now use the external LoadBalancer IP:
+axios.post(`${process.env.REACT_APP_API_URL}/api/products`, newProduct)
+axios.put(`${process.env.REACT_APP_API_URL}/api/products/${id}`, editedProduct)
+axios.delete(`${process.env.REACT_APP_API_URL}/api/products/${id}`)
+
+
+No change in backend routes is needed. The backend continues listening on port 5000.
+### Key Notes
+For internal Kubernetes communication, you can still use the internal service DNS.
+Any change in .env requires rebuilding or restarting the frontend for it to take effect.
+This approach enables external access to the backend without exposing localhost or manually port-forwarding.
 
 
 

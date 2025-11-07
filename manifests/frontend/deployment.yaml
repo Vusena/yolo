@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: yolo-frontend
-          image: vusenad/client:v1.0.2
+          image: vusenad/client:v1.0.3
           ports:
             - containerPort: 80

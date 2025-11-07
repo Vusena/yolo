@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: yolo-backend
-          image: vusenad/yolo-backend:v1.0.2
+          image: vusenad/yolo-bac1.0.3
           ports:
             - containerPort: 5000
           env:
