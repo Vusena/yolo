@@ -588,6 +588,71 @@ MongoDB is now running inside the yolo-db namespace with persistent storage and 
 
 ![gke_setup](client/public/mongodbdeployment.png) 
 
+# Backend Deployment 
+## Resources Deployed
+### 1. Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: yolo-backend
+
+### 2. Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yolo-backend-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: yolo-backend
+  template:
+    metadata:
+      labels:
+        app: yolo-backend
+    spec:
+      containers:
+        - name: backend
+          image: <your-backend-image>
+          ports:
+            - containerPort: 5000
+
+
+-Creates two backend pods for high availability.
+-Uses a label selector to manage pod identity.
+-Exposes port 5000 for internal communication.
+
+### 3. Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: yolo-backend-service
+spec:
+  selector:
+    app: yolo-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: ClusterIP
+
+-Exposes the backend internally within the cluster.
+-Maps port 80 to the container’s port 5000.
+
+### 4. Verification Steps
+Namespace -kubectl get ns
+Deployment- kubectl get deployments -n yolo-backend
+Pods - kubectl get pods -n yolo-backend -w
+Service - kubectl get svc -n yolo-backend (Confirms internal service is created and ready for backend communication.)
+Outcome
+The backend is successfully deployed in a dedicated namespace with two running pods and an internal service. This setup supports internal communication with other services like the frontend or database and is ready for integration testing or production rollout.
+
+![gke_setup](client/public/backenddeployment.png) 
+
+
+
+
+
 
 
 

@@ -480,6 +480,34 @@ Once the pod is running, MongoDB is successfully deployed inside the yolo-db nam
 
 ![gke_setup](client/public/mongodbdeployment.png) 
 
+# Backend Deployment
+## Deployment Step
+kubectl apply -f manifests/backend/namespace.yaml
+kubectl apply -f manifests/backend/deployment.yaml
+kubectl apply -f manifests/backend/service.yaml
+Expected output:
+namespace/yolo-backend created
+deployment.apps/yolo-backend-deployment created
+service/yolo-backend-service created
+
+ ## Verifying the Deployment
+ Check Namespaces- kubectl get ns
+ Check Deployment Status -kubectl get deployments -n yolo-backend
+ Watch Pod Status- kubectl get pods -n yolo-backend -w
+ Check Service- kubectl get svc -n yolo-backend
+
+ Outcome
+The backend is now deployed in the yolo-backend namespace, running as a replicated Deployment with two pods and exposed via a ClusterIP service for internal communication.
+
+![gke_setup](client/public/backenddeployment.png) 
+
+
+
+
+
+
+
+
 
 
 
