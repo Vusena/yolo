@@ -296,3 +296,52 @@ bash
 kubectl get all -n yolo-db
 kubectl get pvc -n yolo-db
 kubectl describe pod yolo-db-0 -n yolo-db
+
+## Local Deployment Summary
+
+---
+
+## 🚀 Deployment Instructions
+Apply manifests in this order:
+
+# Frontend
+kubectl apply -f manifests/frontend/namespace.yaml
+kubectl apply -f manifests/frontend/deployment.yaml
+kubectl apply -f manifests/frontend/service.yaml
+
+# Backend
+kubectl apply -f manifests/backend/namespace.yaml
+kubectl apply -f manifests/backend/deployment.yaml
+kubectl apply -f manifests/backend/service.yaml
+
+# Database
+kubectl apply -f manifests/database/namespace.yaml
+kubectl apply -f manifests/database/pvc.yaml
+kubectl apply -f manifests/database/statefulset.yaml
+kubectl apply -f manifests/database/service.yaml
+
+# Verification Summary
+**Pods**:
+Frontend: 2 pods running, no restarts
+Backend: 2 pods running, initial restarts during DB setup
+Database: 1 StatefulSet pod running, no restarts
+
+**Services**:
+Frontend: LoadBalancer (external access via Minikube tunnel)
+Backend: ClusterIP (internal only)
+Database: Headless ClusterIP (internal only)
+
+**Access**
+minikube service yolo-frontend-service -n yolo-frontend
+
+## Connection String (for backend)
+mongodb://yolo-db-service.yolo-db.svc.cluster.local:27017
+
+## Docker Images
+Frontend: vusenad/client:v1.0.0
+Backend: vusenad/yolo-backend:v1.0.2
+Database: vusenad/yolo-db:v1.0.1
+
+
+
+

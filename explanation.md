@@ -418,3 +418,44 @@ Used `vusenad/yolo-db:v1.0.1` — a semantically versioned tag that supports cla
 
 ## 7. GKE Hosting
 All manifests are designed for GKE deployment. The database is internally scoped and integrated with the backend via DNS-based service discovery. This reflects real-world orchestration for stateful microservices.
+
+## Explanation of Kubernetes Architecture — Local Deployment Phase
+
+This report summarizes the successful deployment of the YOLO application on Minikube, applying orchestration concepts covered in Week 3.
+
+## 1. Kubernetes Objects Used
+- **Namespaces**: Isolated resources for frontend, backend, and database.
+- **Deployments**: Used for frontend and backend with 2 replicas each.
+- **StatefulSet**: Used for MongoDB to ensure stable identity and persistent storage.
+- **PersistentVolumeClaim**: Bound to MongoDB pod for data durability.
+- **Services**:
+  - Frontend: LoadBalancer for external access
+  - Backend: ClusterIP for internal API exposure
+  - Database: Headless ClusterIP for direct pod discovery
+
+## 2. Exposure Method
+- Frontend exposed via LoadBalancer (Minikube tunnel used locally).
+- Backend and database exposed internally via ClusterIP and headless service.
+- Verified access via `minikube service` and internal DNS resolution.
+
+## 3. Persistent Storage
+MongoDB uses a PVC (`mongo-pvc`) provisioned by Minikube’s default storage class. Data remains intact across pod restarts, satisfying rubric requirements.
+
+
+## 4. Debugging Measures
+
+- Used `kubectl get all -n <namespace>` to confirm pod and service status
+- Inspected PVC binding and pod logs
+- Verified frontend access via Minikube tunnel
+- Confirmed backend connectivity to MongoDB using internal DNS
+
+
+## 5. Docker Image Tagging
+All images follow semantic versioning:
+- `vusenad/client:v1.0.0`
+- `vusenad/yolo-backend:v1.0.2`
+- `vusenad/yolo-db:v1.0.1`
+
+![running backend pods ](client/public/deploymentstate.png)
+
+
