@@ -500,6 +500,55 @@ gcloud config list
 
 ![gke_setup](client/public/gcpclisetup.png) 
 
+###  Deploying to Google Kubernetes Engine (GKE)
+This section outlines how to set up Google Cloud CLI, create a GKE cluster, and configure access for deploying your Kubernetes workloads.
+
+## 1. Install Google Cloud CLI (Ubuntu/Debian)
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" \
+  | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+  sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+
+sudo apt-get update && sudo apt-get install google-cloud-cli -y
+
+## 2. Verify installation:
+gcloud version
+
+## 3. Authenticate Your Account
+gcloud auth login
+
+## 4. Set Your Project
+gcloud config set project groovy-reserve-367609
+
+## 5. Enable Required APIs
+gcloud services enable container.googleapis.com compute.googleapis.com
+ 
+## 6. Create a GKE Cluster
+ gcloud container clusters create yolo-cluster \
+  --zone us-central1-a \
+  --num-nodes=1 \
+  --machine-type=e2-small
+ 
+## 7. Install GKE Auth Plugin
+ sudo apt-get install google-cloud-sdk-gke-gcloud-auth-plugin -y
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+  Verify plugin:
+gke-gcloud-auth-plugin --version
+
+## 8. Connect kubectl to Your Cluster
+gcloud container clusters get-credentials yolo-cluster \
+  --zone us-central1-a \
+  --project groovy-reserve-367609
+
+## 9. Verify Cluster Access
+ kubectl get nodes
+
+ Refer to the below screenshots for cluster creation.
+![gke_setup](client/public/clustercreation1.png) 
+![gke_setup](client/public/clustercreation2.png) 
+
+
 
 
 
