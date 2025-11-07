@@ -771,6 +771,21 @@ Any change in .env requires rebuilding or restarting the frontend for it to take
 This approach enables external access to the backend without exposing localhost or manually port-forwarding.
 
 
+# Yolo App — Live Deployment 
+The Yolo App is now running and accessible at:
+[http://34.29.233.40/#products](http://34.29.233.40/#products)
+
+The app correctly persists products to the backend database.
+
+## Environment Change
+- The frontend `.env` was updated from the internal Kubernetes DNS:
+REACT_APP_API_URL=http://yolo-backend-service.yolo-backend.svc.cluster.local:5000
+- To the LoadBalancer external IP provided by the backend service:REACT_APP_API_URL=http://34.29.233.40:5000
+- This allows the frontend to communicate with the backend from outside the cluster.
+
+## Product Persistence
+- Products added, edited, or deleted in the frontend are correctly persisted in the backend database, as demonstrated in the live app.
+
 
 
 

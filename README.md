@@ -557,6 +557,28 @@ For cluster-internal communication, you can still use the internal DNS:
 http://yolo-backend-service.yolo-backend.svc.cluster.local:5000
 Remember to rebuild/restart the frontend after updating .env:npm run build
 
+# Yolo App — Live Demo & Deployment
+## Live Application
+The Yolo App is now running and fully functional. You can access the live version here:
+[**Live Demo → http://34.29.233.40/#products**](http://34.29.233.40/#products)
+✅ The app correctly persists products to the backend database, as verified by testing the product add/edit/delete functionalities.  
+
+![Yolo App Screenshot](client/public/liveapp.png)  
+*Screenshot demonstrates product persistence and app functionality.*
+
+## Overview
+Yolo App is a React frontend integrated with a Node.js backend deployed in Kubernetes. Users can:
+- Add new products
+- Edit existing products
+- Delete products
+- View all products
+
+## Notes
+- The live app is publicly accessible at the link above.
+- Product data persists correctly; any products added or edited will remain in the database.
+- The frontend communicates with the backend using the LoadBalancer external IP for Kubernetes services.
+
+
 
 
 
