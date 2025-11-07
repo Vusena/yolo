@@ -548,6 +548,51 @@ gcloud container clusters get-credentials yolo-cluster \
 ![gke_setup](client/public/clustercreation1.png) 
 ![gke_setup](client/public/clustercreation2.png) 
 
+# MONGODB Deployment
+# Explanation of MongoDB Deployment in GKE
+## Purpose
+This document explains the steps taken to deploy a MongoDB database inside a Google Kubernetes Engine (GKE) cluster using Kubernetes manifests. It includes context verification, resource creation, and validation commands.
+
+## Cluster Context
+We are operating inside the GKE cluster:
+kubectl config current-context -gke_groovy-reserve-367609_us-central1-a_yolo-cluster
+This confirms that our kubectl is pointing to the correct GKE cluster.
+ ## Node Verification
+kubectl get nodes -gke-yolo-cluster-default-pool-xxxxxxx-xxxx   Ready   <none>   <age>   v1.33.5-gke.1162000
+This confirms that the cluster is active and ready to schedule workloads.
+
+## MongoDB Deployment Steps
+We deployed MongoDB using four manifests:
+Namespace
+Isolates MongoDB resources under yolo-db.
+PersistentVolumeClaim (PVC)
+Requests 1Gi of storage with ReadWriteOnce access.
+Service
+Exposes MongoDB internally via yolo-db-service.
+StatefulSet
+Ensures stable pod identity and persistent volume binding.
+Commands used:
+kubectl apply -f manifests/database/namespace.yaml
+kubectl apply -f manifests/database/pvc.yaml
+kubectl apply -f manifests/database/service.yaml
+kubectl apply -f manifests/database/statefulset.yaml
+
+## Resource Validation
+Namespace- kubectl get ns
+PVC- kubectl get pvc -n yolo-db
+kubectl get pvc -n yolo-db- kubectl get sts -n yolo-db
+Pod Status- kubectl get pods -n yolo-db -w
+
+Outcome
+MongoDB is now running inside the yolo-db namespace with persistent storage and internal service exposure. This setup supports backend data persistence and is ready for integration with the Yolo application.
+
+![gke_setup](client/public/mongodbdeployment.png) 
+
+
+
+
+
+
 
 
 

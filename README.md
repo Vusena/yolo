@@ -446,6 +446,48 @@ gcloud container clusters get-credentials yolo-cluster \
 ![gke_setup](client/public/clustercreation1.png) 
 ![gke_setup](client/public/clustercreation2.png) 
 
+# Mongo DB  Deploymnent
+## Current Kubernetes Context
+To verify your active cluster:
+kubectl config current-context
+- Expected output:
+  gke_groovy-reserve-367609_us-central1-a_yolo-cluster
+- To confirm node status:
+  kubectl get nodes
+
+## Apply the following manifests to set up the database namespace, persistent volume claim, service, and StatefulSet:
+kubectl apply -f manifests/database/namespace.yaml
+kubectl apply -f manifests/database/pvc.yaml
+kubectl apply -f manifests/database/service.yaml
+kubectl apply -f manifests/database/statefulset.yaml
+- Expected output:
+namespace/yolo-db created
+persistentvolumeclaim/mongo-pvc created
+service/yolo-db-service created
+statefulset.apps/yolo-db created
+- Check namespace creation:
+kubectl get ns
+- Check PVC and volume binding:
+kubectl get pvc -n yolo-db
+- Check StatefulSet status:
+kubectl get sts -n yolo-db
+-Watch pod creation:
+kubectl get pods -n yolo-db -w
+- Expected pod status:
+yolo-db-0   1/1     Running   0   <age>
+- Outcome
+Once the pod is running, MongoDB is successfully deployed inside the yolo-db namespace and ready to serve backend requests. This setup ensures persistent storage and stable identity via StatefulSet.
+
+![gke_setup](client/public/mongodbdeployment.png) 
+
+
+
+
+
+
+
+
+
 
 
 
