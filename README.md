@@ -342,6 +342,32 @@ Frontend: vusenad/client:v1.0.0
 Backend: vusenad/yolo-backend:v1.0.2
 Database: vusenad/yolo-db:v1.0.1
 
+# Updating the Client Application for Kubernetes Compatibility
 
+This update ensures that the React frontend correctly communicates with the backend API when deployed inside a Kubernetes cluster. The key changes involve configuring the API endpoint, rebuilding the frontend with the correct environment variables, and pushing the updated image to Docker Hub.
 
+1. Updated .env File
+REACT_APP_API_URL=http://yolo-backend-service.yolo-backend.svc.cluster.local:5000
+This sets the base URL for API requests to the internal Kubernetes service name of the backend.
+It replaces any hardcoded or incorrect references to localhost or unresolved variables.
 
+2. Corrected API Usage in Code
+const API_BASE = process.env.REACT_APP_API_URL;
+
+3. Rebuilt the React App
+   npm run build
+   This compiles the app with the updated environment variable.
+   Ensures the final JavaScript bundle contains the correct API URL.
+
+4. Rebuilt and Pushed Docker Image
+docker build -t vusena/client:v1.0.6 .
+docker push vusena/client:v1.0.6
+The new image includes the corrected build.
+Tagged and pushed to Docker Hub for deployment.
+
+5. Updated Kubernetes Deployment
+image: vusena/client:v1.0.6
+Ensures the cluster uses the latest image with the correct API configuration.
+
+   Outcome
+These changes ensure that the frontend can successfully communicate with the backend inside the Kubernetes cluster. Products can now be listed and added via the UI, and the application behaves as expected in a containerized environment.

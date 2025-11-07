@@ -456,6 +456,24 @@ All images follow semantic versioning:
 - `vusenad/yolo-backend:v1.0.2`
 - `vusenad/yolo-db:v1.0.1`
 
-![running backend pods ](client/public/deploymentstate.png)
+![running backend pods ](client/public/deploymentstate.png) 
+
+# Explanation of Client Application Updates for Kubernetes Deployment
+## Purpose
+This document explains the changes made to the React client application to ensure proper communication with the backend API when deployed inside a Kubernetes cluster. It outlines the reasons for updating the `.env` file, correcting API usage in the code, rebuilding the frontend, and pushing the updated image to Docker Hub.
+
+## Background
+In local development, the frontend typically communicates with the backend via `localhost`. However, in a Kubernetes environment, services are accessed using internal DNS names or exposed via external IPs. React applications require environment variables to be defined at build time, and incorrect usage can lead to broken API calls and failed data fetching.
+
+## Key Changes
+### 1. Updated `.env` File
+REACT_APP_API_URL=http://yolo-backend-service.yolo-backend.svc.cluster.local:5000
+This sets the base URL for API requests to the internal backend service name within the Kubernetes cluster.
+Ensures that React uses the correct endpoint during build time
+
+### 2.Corrected API Usage in Code 
+API_BASE = "process.env.REACT_APP_API_URL;";
+
+
 
 
