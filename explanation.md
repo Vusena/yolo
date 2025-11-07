@@ -601,6 +601,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: yolo-backend-deployment
+  namespace: yolo-backend
+  labels:
+    app: yolo-backend
 spec:
   replicas: 2
   selector:
@@ -610,12 +613,29 @@ spec:
     metadata:
       labels:
         app: yolo-backend
+        tier: backend
+        purpose: api
+      annotations:
+        description: "Backend API for Yolo application"
     spec:
       containers:
-        - name: backend
-          image: <your-backend-image>
+        - name: yolo-backend
+          image: vusenad/yolo-backend:v1.0.2
           ports:
             - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+            - name: MONGODB_URI
+              value: "mongodb://yolo-db-service.yolo-db.svc.cluster.local:27017/yolomy"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+
 
 
 -Creates two backend pods for high availability.
@@ -627,14 +647,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: yolo-backend-service
+  namespace: yolo-backend
 spec:
+  type: ClusterIP
   selector:
     app: yolo-backend
   ports:
-    - protocol: TCP
-      port: 80
+    - port: 5000
       targetPort: 5000
-  type: ClusterIP
+
 
 -Exposes the backend internally within the cluster.
 -Maps port 80 to the container’s port 5000.
@@ -648,6 +669,79 @@ Outcome
 The backend is successfully deployed in a dedicated namespace with two running pods and an internal service. This setup supports internal communication with other services like the frontend or database and is ready for integration testing or production rollout.
 
 ![gke_setup](client/public/backenddeployment.png) 
+
+# Front End Deployment
+## Resources Deployed
+### 1. Namespace: `yolo-frontend`
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: yolo-frontend
+
+- Creates a dedicated namespace to isolate frontend resources.
+- Enables scoped access control, monitoring, and resource quotas. 
+
+### Deployment: yolo-frontend-deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yolo-frontend-deployment
+  namespace: yolo-frontend
+  labels:
+    app: yolo-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: yolo-frontend
+  template:
+    metadata:
+      labels:
+        app: yolo-frontend
+    spec:
+      containers:
+        - name: yolo-frontend
+          image: vusenad/client:v1.0.2
+          ports:
+            - containerPort: 80
+Deploys two replicas of the frontend container for high availability.
+Uses the image vusenad/client:v1.0.2, which serves the React-based UI.
+Exposes port 80 inside the container for HTTP traffic.
+Labels (app: yolo-frontend) are used for service discovery and pod selection.      
+
+### Service: yolo-frontend-service
+apiVersion: v1
+kind: Service
+metadata:
+  name: yolo-frontend-service
+  namespace: yolo-frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: yolo-frontend
+  ports:
+    - port: 80
+      targetPort: 80
+
+- Exposes the frontend application externally via a cloud-managed LoadBalancer.
+- Maps port 80 on the service to port 80 in the container.
+- Uses the same label selector (app: yolo-frontend) to route traffic to the correct pods.  
+
+![gke_setup](client/public/frontenddeployment1.png) 
+![gke_setup](client/public/frontenddeployment2.png) 
+
+### Deployment Flow
+Namespace is created to isolate frontend resources.
+Deployment launches two pods running the frontend container.
+Service exposes the pods via a LoadBalancer, assigning an external IP.
+Users can access the frontend via the external IP on port 80.
+
+### Outcome
+The Yolo frontend is successfully deployed in a dedicated namespace with two running pods and a public-facing LoadBalancer service. 
+This setup enables external access to the UI and supports communication with backend services.
+
+![gke_setup](client/public/frontendlink.png) 
+
 
 
 

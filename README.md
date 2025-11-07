@@ -501,6 +501,37 @@ The backend is now deployed in the yolo-backend namespace, running as a replicat
 
 ![gke_setup](client/public/backenddeployment.png) 
 
+# Frontend Deployment
+##  Deployment Steps
+kubectl apply -f manifests/frontend/namespace.yaml
+kubectl apply -f manifests/frontend/deployment.yaml
+kubectl apply -f manifests/frontend/service.yaml
+
+## Expected output:
+namespace/yolo-frontend created
+deployment.apps/yolo-frontend-deployment created
+service/yolo-frontend-service created
+
+## Verifying the Deployment
+Check Deployment Status -kubectl get deployments -n yolo-frontend
+Watch Pod Status- kubectl get pods -n yolo-frontend -w
+Check Service Exposure - kubectl get svc -n yolo-frontend
+
+![gke_setup](client/public/frontenddeployment1.png) 
+![gke_setup](client/public/frontenddeployment2.png) 
+
+## Accessing the Frontend
+Once the LoadBalancer is provisioned, open the app in your browser:
+** http://34.29.233.40**
+
+Outcome
+The frontend is now live, running in the yolo-frontend namespace with two pods and a public-facing LoadBalancer. It is ready to serve UI traffic and connect to the backend service.
+![gke_setup](client/public/frontendlink.png) 
+
+
+
+
+
 
 
 
