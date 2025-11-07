@@ -472,7 +472,34 @@ This sets the base URL for API requests to the internal backend service name wit
 Ensures that React uses the correct endpoint during build time
 
 ### 2.Corrected API Usage in Code 
-API_BASE = "process.env.REACT_APP_API_URL;";
+API_BASE = "process.env.REACT_APP_API_URL;"
+
+### Setting Up Google Cloud CLI and GKE
+echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" \
+  | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+  sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+sudo apt-get update && sudo apt-get install google-cloud-cli -y
+
+# 2. Verify installation:
+gcloud version
+
+# 3.Authenticate Your Account
+gcloud auth login
+Opens a browser window to log in with your Google account.
+
+# 4.Set Your Project
+gcloud config set project PROJECT_ID
+
+# 5.Enable Required APIs
+gcloud services enable container.googleapis.com compute.googleapis.com
+
+# 6.Verify Configuration
+gcloud config list
+
+![gke_setup](client/public/gcpclisetup.png) 
+
 
 
 
